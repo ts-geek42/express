@@ -19,4 +19,13 @@ export class UserService {
       throw error;
     }
   }
+  async getAllUsers(): Promise<any[]> {
+    try {
+      const users = await UserModel.find();
+      return users;
+    } catch (error) {
+      console.error("Error fetching all users:", error);
+      throw error;
+    }
+  }
 }

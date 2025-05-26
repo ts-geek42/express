@@ -29,4 +29,12 @@ export class UserController {
       next(error);
     }
   }
+  async getAllUsers(req: any, res: any, next: NextFunction) {
+    try {
+      const users = await this.userService.getAllUsers();
+      res.status(200).json(users);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
