@@ -1,17 +1,16 @@
 import UserModel from "../../models/user/UserModel";
-import User from "../../repositories/user/User";
 
-export class UserService {
-  async createUser(userData: any): Promise<any> {
+class User {
+  async create(userData: any): Promise<any> {
     try {
-      const user = await User.create(userData);
+      const user = await UserModel.create(userData);
       return user;
     } catch (error) {
       console.error("Error creating user:", error);
       throw error;
     }
   }
-  async getUser(userId: string): Promise<any> {
+  async get(userId: string): Promise<any> {
     try {
       const user = await UserModel.findById(userId);
       return user;
@@ -20,7 +19,7 @@ export class UserService {
       throw error;
     }
   }
-  async getAllUsers(): Promise<any[]> {
+  async getAll(): Promise<any[]> {
     try {
       const users = await UserModel.find();
       return users;
@@ -29,7 +28,7 @@ export class UserService {
       throw error;
     }
   }
-  async updateUser(userId: string, userData: any): Promise<any> {
+  async update(userId: string, userData: any): Promise<any> {
     try {
       const user = await UserModel.findByIdAndUpdate(userId, userData, {
         new: true,
@@ -42,7 +41,7 @@ export class UserService {
     }
   }
 
-  async deleteUser(userId: string): Promise<any> {
+  async delete(userId: string): Promise<any> {
     try {
       const user = await UserModel.findByIdAndDelete(userId);
       return user;
@@ -52,3 +51,5 @@ export class UserService {
     }
   }
 }
+
+export default new User();
