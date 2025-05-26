@@ -40,4 +40,14 @@ export class UserService {
       throw error;
     }
   }
+
+  async deleteUser(userId: string): Promise<any> {
+    try {
+      const user = await UserModel.findByIdAndDelete(userId);
+      return user;
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      throw error;
+    }
+  }
 }
