@@ -18,4 +18,15 @@ export class UserController {
       next(error);
     }
   }
+  async getUser(req: any, res: any, next: NextFunction) {
+    try {
+      const user = await this.userService.getUser(req.params.id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

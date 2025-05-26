@@ -5,5 +5,5 @@ const userRoutes = Router();
 const userController = new UserController();
 
 userRoutes.post("/", userController?.createUser?.bind(userController));
-
+userRoutes.get("/:id", userController?.getUser?.bind(userController));
 export default userRoutes;

@@ -10,4 +10,13 @@ export class UserService {
       throw error;
     }
   }
+  async getUser(userId: string): Promise<any> {
+    try {
+      const user = await UserModel.findById(userId);
+      return user;
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      throw error;
+    }
+  }
 }
