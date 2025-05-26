@@ -28,4 +28,16 @@ export class UserService {
       throw error;
     }
   }
+  async updateUser(userId: string, userData: any): Promise<any> {
+    try {
+      const user = await UserModel.findByIdAndUpdate(userId, userData, {
+        new: true,
+        runValidators: true,
+      });
+      return user;
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw error;
+    }
+  }
 }
