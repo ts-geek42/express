@@ -1,15 +1,53 @@
+import {
+  comparePassword,
+  generateAccessToken,
+  hashPassword,
+} from "../../../helpers/auth";
+import { UserTypes } from "../../models/user";
 import UserModel from "../../models/user/UserModel";
 
 class User {
-  async create(userData: any): Promise<any> {
+  async signup(userData: any): Promise<any> {
     try {
+      const isExist = await UserModel.findOne({ email: userData.email });
+      if (isExist) {
+        throw new Error("User with this email already exists");
+      }
+
+      userData.password = hashPassword(userData.password);
       const user = await UserModel.create(userData);
-      return user;
+      if (!user) {
+        throw new Error("Error creating user");
+      }
+      const token = generateAccessToken(`${user._id}`);
+      return token;
     } catch (error) {
       console.error("Error creating user:", error);
       throw error;
     }
   }
+
+  async login(userData: UserTypes): Promise<any> {
+    try {
+      const user = await UserModel.findOne({
+        email: userData.email,
+      }).schemaLevelProjections(false);
+      if (!user) {
+        throw new Error("User with this email not exists");
+      }
+      const isValidUser = comparePassword(userData.password, user.password);
+      if (!isValidUser) {
+        throw new Error("Invalid credentials");
+      }
+
+      const token = generateAccessToken(`${user._id}`);
+      return token;
+    } catch (error) {
+      console.error("Error logging in:", error);
+      throw error;
+    }
+  }
+
   async get(userId: string): Promise<any> {
     try {
       const user = await UserModel.findById(userId);

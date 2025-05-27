@@ -8,16 +8,6 @@ export class UserController {
     this.userService = new UserService();
   }
 
-  async createUser(req: any, res: any, next: NextFunction) {
-    try {
-      const user = await this.userService.createUser(req.body);
-      res.status(201).json({
-        message: "User created successfully",
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
   async getUser(req: any, res: any, next: NextFunction) {
     try {
       const user = await this.userService.getUser(req.params.id);
