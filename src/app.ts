@@ -1,38 +1,24 @@
+import "dotenv/config";
 import express from "express";
+import { config, dbConnect } from "./core";
+import { middlewares } from "./web/middlewares";
 import useRouter from "./web/routes";
 
 const makeApp = () => {
-  const express = require("express");
-  const dotenv = require("dotenv");
-  const mongoose = require("mongoose");
-
-  dotenv.config({ path: "./.env" });
-
   const app = express();
-  const port = process.env.PORT || 3000;
+  const port = config.PORT;
 
-  mongoose.connect(
-    "mongodb+srv://romilmangukiya:wSW3lmWWNkLuRmUa@express.0mrdunc.mongodb.net/"
-  );
-
-  const db = mongoose.connection;
-
-  db.on("connected", () => {
-    console.log("✅ MongoDB connected successfully!");
-  });
-
-  db.on("error", (err: any) => {
-    console.error("❌ MongoDB connection error:", err);
-  });
-
-  db.on("disconnected", () => {
-    console.warn("⚠️ MongoDB disconnected!");
-  });
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  dbConnect();
+
+  middlewares(app);
+
   useRouter(app);
-  app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
+
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
   });
 };
 export default makeApp;

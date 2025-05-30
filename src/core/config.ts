@@ -37,7 +37,7 @@ const envSchema = z.object({
 
 function validateConfig() {
   try {
-    const config = envSchema.parse({
+    const config = {
       NODE_ENV: process.env.NODE_ENV,
       PORT: process.env.PORT,
       MONGODB_URI: process.env.MONGODB_URI,
@@ -45,7 +45,7 @@ function validateConfig() {
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
         process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
       CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-    });
+    };
 
     return config;
   } catch (error) {
