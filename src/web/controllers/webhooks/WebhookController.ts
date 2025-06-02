@@ -8,44 +8,30 @@ export class WebhookController {
   }
 
   async handleWebhook(req: any, res: any) {
-    const body = req.body;
-    const eventType = body?.type;
-    const data = body?.data;
-
-    console.log("Webhook Received:", body);
+    const { type: eventType, data } = req.body;
 
     try {
       switch (eventType) {
-        case "user.created": {
+        case "user.created":
           await this.webhooksService.createUser(data);
-          res.status(200).send({ message: "User created successfully" });
-          break;
-        }
+          return res.status(200).json({ message: "User created successfully" });
 
-        case "user.updated": {
+        case "user.updated":
           await this.webhooksService.updateUser(data);
-          res.status(200).send({ message: "User updated successfully" });
-          break;
-        }
+          return res.status(200).json({ message: "User updated successfully" });
 
-        case "user.deleted": {
-          console.log(data, "data");
+        case "user.deleted":
           await this.webhooksService.deleteUser(data);
-          res.status(200).send({ message: "User deleted successfully" });
-          break;
-        }
+          return res.status(200).json({ message: "User deleted successfully" });
 
-        default: {
-          console.warn("Unhandled event type:", eventType);
-          res
-            .status(400)
-            .send({ message: `Unhandled event type: ${eventType}` });
-          break;
-        }
+        default:
+          return res.status(400).json({
+            message: `Unhandled event type: ${eventType}`,
+          });
       }
     } catch (error) {
-      console.error("Webhook handling error:", error);
-      res.status(500).send({ message: "Internal server error" });
+      console.error("❌ Webhook handling error:", error);
+      return res.status(500).json({ message: "Internal server error" });
     }
   }
 }

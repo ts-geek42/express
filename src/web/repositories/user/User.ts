@@ -51,6 +51,9 @@ class User {
   async get(userId: string): Promise<any> {
     try {
       const user = await UserModel.findById(userId);
+      if (!user) {
+        throw new Error("User not found");
+      }
       return user;
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -72,6 +75,9 @@ class User {
         new: true,
         runValidators: true,
       });
+      if (!user) {
+        throw new Error("User not found");
+      }
       return user;
     } catch (error) {
       console.error("Error updating user:", error);
@@ -82,6 +88,9 @@ class User {
   async delete(userId: string): Promise<any> {
     try {
       const user = await UserModel.findByIdAndDelete(userId);
+      if (!user) {
+        throw new Error("User not found");
+      }
       return user;
     } catch (error) {
       console.error("Error deleting user:", error);

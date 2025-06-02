@@ -14,7 +14,7 @@ const clerkUserSchema = new Schema<ClerkUserType>(
     },
     birthdate: Date,
     gender: String,
-    userId: String,
+    userId: { type: String, required: true, unique: true },
     phoneNumber: String,
   },
   { timestamps: true }

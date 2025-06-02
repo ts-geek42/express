@@ -1,10 +1,9 @@
-import UserModel from "../../models/user/UserModel";
+import User from "../../repositories/user/User";
 
 export class UserService {
   async getUser(userId: string): Promise<any> {
     try {
-      const user = await UserModel.findById(userId);
-      return user;
+      return await User.get(userId);
     } catch (error) {
       console.error("Error fetching user:", error);
       throw error;
@@ -12,8 +11,7 @@ export class UserService {
   }
   async getAllUsers(): Promise<any[]> {
     try {
-      const users = await UserModel.find();
-      return users;
+      return await User.getAll();
     } catch (error) {
       console.error("Error fetching all users:", error);
       throw error;
@@ -21,11 +19,7 @@ export class UserService {
   }
   async updateUser(userId: string, userData: any): Promise<any> {
     try {
-      const user = await UserModel.findByIdAndUpdate(userId, userData, {
-        new: true,
-        runValidators: true,
-      });
-      return user;
+      return await User.update(userId, userData);
     } catch (error) {
       console.error("Error updating user:", error);
       throw error;
@@ -34,8 +28,7 @@ export class UserService {
 
   async deleteUser(userId: string): Promise<any> {
     try {
-      const user = await UserModel.findByIdAndDelete(userId);
-      return user;
+      return await User.delete(userId);
     } catch (error) {
       console.error("Error deleting user:", error);
       throw error;
