@@ -1,3 +1,5 @@
+import { StatusCodes } from "../../../types";
+import { ServerError } from "../../../utils";
 import ClerkUserModel from "../../models/clerkUser/UserModel";
 
 class ClerkUser {
@@ -6,8 +8,16 @@ class ClerkUser {
       const user = await ClerkUserModel.create(userData);
       return user;
     } catch (error) {
-      console.error("Error creating Clerk user:", error);
-      throw error;
+      if (error instanceof ServerError) {
+        throw new ServerError({
+          code: error.code,
+          message: error.message,
+        });
+      }
+      throw new ServerError({
+        code: StatusCodes.BAD_REQUEST,
+        message: "Failed to Create user",
+      });
     }
   }
 
@@ -20,8 +30,16 @@ class ClerkUser {
       );
       return user;
     } catch (error) {
-      console.error("Error updating Clerk user:", error);
-      throw error;
+      if (error instanceof ServerError) {
+        throw new ServerError({
+          code: error.code,
+          message: error.message,
+        });
+      }
+      throw new ServerError({
+        code: StatusCodes.BAD_REQUEST,
+        message: "Failed to update user",
+      });
     }
   }
 
@@ -29,8 +47,16 @@ class ClerkUser {
     try {
       await ClerkUserModel.findOneAndDelete({ userId });
     } catch (error) {
-      console.error("Error deleting Clerk user:", error);
-      throw error;
+      if (error instanceof ServerError) {
+        throw new ServerError({
+          code: error.code,
+          message: error.message,
+        });
+      }
+      throw new ServerError({
+        code: StatusCodes.BAD_REQUEST,
+        message: "Failed to delete user",
+      });
     }
   }
 }

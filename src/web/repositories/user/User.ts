@@ -3,6 +3,8 @@ import {
   generateAccessToken,
   hashPassword,
 } from "../../../helpers/auth";
+import { StatusCodes } from "../../../types";
+import { ServerError } from "../../../utils";
 import { UserTypes } from "../../models/user";
 import UserModel from "../../models/user/UserModel";
 
@@ -22,8 +24,16 @@ class User {
       const token = generateAccessToken(`${user._id}`);
       return token;
     } catch (error) {
-      console.error("Error creating user:", error);
-      throw error;
+      if (error instanceof ServerError) {
+        throw new ServerError({
+          code: error.code,
+          message: error.message,
+        });
+      }
+      throw new ServerError({
+        code: StatusCodes.BAD_REQUEST,
+        message: "Failed to Create user",
+      });
     }
   }
 
@@ -43,8 +53,16 @@ class User {
       const token = generateAccessToken(`${user._id}`);
       return token;
     } catch (error) {
-      console.error("Error logging in:", error);
-      throw error;
+      if (error instanceof ServerError) {
+        throw new ServerError({
+          code: error.code,
+          message: error.message,
+        });
+      }
+      throw new ServerError({
+        code: StatusCodes.BAD_REQUEST,
+        message: "Failed to authenticate user",
+      });
     }
   }
 
@@ -56,8 +74,16 @@ class User {
       }
       return user;
     } catch (error) {
-      console.error("Error fetching user:", error);
-      throw error;
+      if (error instanceof ServerError) {
+        throw new ServerError({
+          code: error.code,
+          message: error.message,
+        });
+      }
+      throw new ServerError({
+        code: StatusCodes.BAD_REQUEST,
+        message: "Failed to get user",
+      });
     }
   }
   async getAll(): Promise<any[]> {
@@ -65,8 +91,16 @@ class User {
       const users = await UserModel.find();
       return users;
     } catch (error) {
-      console.error("Error fetching all users:", error);
-      throw error;
+      if (error instanceof ServerError) {
+        throw new ServerError({
+          code: error.code,
+          message: error.message,
+        });
+      }
+      throw new ServerError({
+        code: StatusCodes.BAD_REQUEST,
+        message: "Failed to get users",
+      });
     }
   }
   async update(userId: string, userData: any): Promise<any> {
@@ -80,8 +114,16 @@ class User {
       }
       return user;
     } catch (error) {
-      console.error("Error updating user:", error);
-      throw error;
+      if (error instanceof ServerError) {
+        throw new ServerError({
+          code: error.code,
+          message: error.message,
+        });
+      }
+      throw new ServerError({
+        code: StatusCodes.BAD_REQUEST,
+        message: "Failed to update user",
+      });
     }
   }
 
@@ -93,8 +135,16 @@ class User {
       }
       return user;
     } catch (error) {
-      console.error("Error deleting user:", error);
-      throw error;
+      if (error instanceof ServerError) {
+        throw new ServerError({
+          code: error.code,
+          message: error.message,
+        });
+      }
+      throw new ServerError({
+        code: StatusCodes.BAD_REQUEST,
+        message: "Failed to delete user",
+      });
     }
   }
 }
